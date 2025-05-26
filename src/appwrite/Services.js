@@ -1,9 +1,9 @@
-import {client,Databases,ID} from 'appwrite'
+import { Client,Databases } from 'appwrite';
 import conf from '../config/Conf'
 
 export class Services{
 
-    client=new client();
+    client=new Client();
     Databases;
 
     constructor(){
@@ -84,3 +84,6 @@ export class Services{
 
 
 }
+
+const service=new Services();
+export default service;

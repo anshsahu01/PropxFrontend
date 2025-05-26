@@ -30,7 +30,7 @@ async createAccount({email,password,Name}){
 
         if(userAccount){
             console.log("Account created Succesfully");
-            return this.Login({email,password});
+            return userAccount;
         }
         
     } catch (error) {
@@ -43,27 +43,22 @@ async createAccount({email,password,Name}){
 
 //2) Login method
 
-async Login ({email, password}){
-    try {
-        const currentSession = await this.getCurrentUser();
-        if (currentSession) {
-            console.log("User already logged in");
-            return currentSession;
-        }
 
-        const session=await this.account.createEmailPasswordSession(email,password);
-        console.log("Login success");
-        return session;
-        
-    } catch (error) {
-        console.log(error,"error in Login");
-        throw error;
-     
-        
-    }
 
+async Login({ email, password }) {
+  try {
+    
+    const session = await this.account.createEmailPasswordSession(email, password);
+    console.log("Login success");
+
+   
+    return session;
+
+  } catch (error) {
+    console.log(error, "error in Login");
+    throw error;
+  }
 }
-
 // to get the current user
 
 async getCurrentUser(){
