@@ -28,12 +28,7 @@ async createAccount({email,password,Name}){
             ID.unique(),email,password,Name
         );
 
-        if(userAccount){
-            console.log("Account created Succesfully");
-            return this.Login(email,password);
-        }else{
-            return userAccount;
-        }
+       return userAccount;
         
     } catch (error) {
         console.log("Appwrite error in creating account",error);

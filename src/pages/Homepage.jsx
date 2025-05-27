@@ -1,33 +1,9 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Homepage() {
-    const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
-
-    // <div className="flex flex-col justify-end items-center min-h-screen bg-gray-50 px-4 py-10">
-    //   <div className="text-center w-full max-w-sm">
-    //     <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to PopX</h1>
-    //     <p className="text-gray-500 mb-6">
-    //       Lorem ipsum dolor sit amet, consectetur adipiscing elit
-    //     </p>
-
-    //     <button
-    //       onClick={() => navigate("/signin")}
-    //       className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-md mb-3 transition duration-200"
-    //     >
-    //       Create Account
-    //     </button>
-
-    //     <button
-    //       onClick={() => navigate("/login")}
-    //       className="w-full bg-purple-200 hover:bg-purple-300 text-purple-800 font-medium py-3 rounded-md transition duration-200"
-    //     >
-    //       Already Registered? Login
-    //     </button>
-    //   </div>
-    // </div>
-
     <div className="min-h-screen bg-[#F7F8F9] flex items-center justify-center">
       <div className="w-[375px] h-[812px] bg-white shadow-md flex flex-col justify-end p-6 rounded-md">
         <div className="mb-8">
@@ -57,9 +33,7 @@ function Homepage() {
         </div>
       </div>
     </div>
-    
-      
-  )
+  );
 }
 
-export default Homepage
+export default Homepage;

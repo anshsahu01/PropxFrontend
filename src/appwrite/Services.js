@@ -1,89 +1,63 @@
-import { Client,Databases } from 'appwrite';
-import conf from '../config/Conf'
+import { Client, Databases, Query } from "appwrite";
+import conf from "../config/Conf";
 
-export class Services{
+export class Services {
+  client = new Client();
+  Databases;
 
-    client=new Client();
-    Databases;
+  constructor() {
+    this.client
+      .setEndpoint(conf.appwriteUrl)
+      .setProject(conf.appwriteProjectId);
 
-    constructor(){
+    this.Databases = new Databases(this.client);
+  }
 
-        this.client
-        .setEndpoint(conf.appwriteUrl)
-     .setProject(conf.appwriteProjectId)
+  //methods
 
-     this.Databases=new Databases(this.client);
+  // create user and collect all details
 
-    }
+  async createProfile({ MobileNo, Company, Name, UserId, email }) {
+    try {
+      const Profile = await this.Databases.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserCollectionId,
+        UserId,
+        {
+          Name,
+          MobileNo,
+          Company,
 
-
-    //methods
-
-    // create user and collect all details
-
-    async createProfile({MobileNo,Company,Name,UserId,IsAgency}){
-        try {
-            const Profile=await this.Databases.createDocument(
-                conf.appwriteDatabaseId,
-                conf.appwriteUserCollectionId,
-                ID.unique(),
-                {
-                    UserId,
-                    Name,
-                    MobileNo,
-                    Company,
-                    IsAgency
-
-                }
-            )
-            if(Profile){
-                console.log("Profile created Succesfully");
-            }
-            return Profile;
-            
-        } catch (error) {
-            console.log("Error in profile",error);
-            throw error;
-            
+          email,
         }
+      );
+      if (Profile) {
+        console.log("Profile created Succesfully");
+      }
+      return Profile;
+    } catch (error) {
+      console.log("Error in profile", error);
+      throw error;
+      return null;
     }
+  }
 
+  //method to get userDetails
 
-    //method to get userDetails
-    async getProfileDetails(UserId){
-        
-        try {
-            const response=await this.Databases.listDocuments(
-                conf.appwriteDatabaseId,
-                conf.appwriteUserCollectionId
-                [Query.equal('UserId',UserId)]
-            );
-
-            return response.documents[0];
-
-
-                
-           
-            
-        } catch (error) {
-            console.log("Appwrite error in getting Profile Details",error) ;
-            return null;  
-        }
-
+  async getProfileDetails(userId) {
+    try {
+      const profile = await this.Databases.getDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteUserCollectionId,
+        userId
+      );
+      return profile;
+    } catch (error) {
+      console.error("Error fetching profile", error);
+      return null;
     }
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 }
 
-const service=new Services();
+const service = new Services();
 export default service;
