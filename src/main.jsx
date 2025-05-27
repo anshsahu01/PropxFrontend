@@ -9,6 +9,7 @@ import {Provider} from 'react-redux'
 import SignInpage from './pages/SignInpage.jsx'
 import Loginpage from './pages/Loginpage.jsx'
 import Profilepage from './pages/Profilepage.jsx'
+import Homepage from './pages/Homepage.jsx'
 
 
 const router=createBrowserRouter(
@@ -19,6 +20,11 @@ const router=createBrowserRouter(
       children:[
         {
           path:"/",
+          element:<Homepage/>
+
+        },
+        {
+          path:"/signin",
           element:<SignInpage/>
           
         },

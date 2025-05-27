@@ -1,86 +1,108 @@
-import React from 'react'
-import Input from './Input'
-import { useSelector,useDispatch } from 'react-redux'
-import authService from '../appwrite/Auth'
-import service from '../appwrite/Services'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { current } from '@reduxjs/toolkit'
-
+import React from 'react';
+import Input from './Input';
+import { useSelector, useDispatch } from 'react-redux';
+import authService from '../appwrite/Auth';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { login as authLogin, logout as authLogout } from '../Store/Authslice';
 
 function Login() {
-    const dispatch=useDispatch();
-    const navigate=useNavigate();
-    const currentState=useSelector((state)=>state.auth.isLoggedIn);
-    const {register,handleSubmit}=useForm();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const currentState = useSelector((state) => state.auth.isLoggedIn);
+  const { register, handleSubmit } = useForm();
+
+  const loginHandle = async (data) => {
+    try {
 
 
-    const loginHandle=async (data)=>{
-        try {
+      const session = await authService.Login({
+        email: data.email,
+        password: data.password,
+      });
 
-            try {
-                const currentSession=await authService.getCurrentUser();
-                if(currentSession){
-                    console.log("user aleready logged in");
-                    navigate("/profile");
-                    return currentSession;
-                }
-                
-            } catch (error) {
-            throw error;
-                
-            }
-           const session= await authService.Login({email:data.email,password:data.password});
-           if(session){
-            console.log("login successfully");
-            navigate("/profile");
-           }
-            
-        } catch (error) {
-            console.log("login error",error);
-            throw error;
-            
-        }
-
+      if (session) {
+        console.log('login successfully');
+        const currentUser = await authService.getCurrentUser();
+        if(currentUser){
+        dispatch(authLogin(currentUser));
+        navigate('/profile');
+      }
+      }
+    } catch (error) {
+      console.log('login error', error);
     }
+  };
 
+  const handleLogout = async () => {
+    try {
+      const currentUser=await authService.getCurrentUser();
+      if(currentUser){
+        await authService.Logout();
+        dispatch(authLogout());
+        console.log('Logout successfully');
 
-    const handleLogout=async()=>{
-        try {
-            await authService.Logout();
-            
-        } catch (error) {
-            console.log("error in logout",error);
-            throw error;
-            
-        }
-        
+      }else{
+        console.log("not login login first");
+
+      }
+      
+     
+    } catch (error) {
+      console.log('error in logout', error);
     }
+  };
+
   return (
-    <div>
-        <form onSubmit={handleSubmit(loginHandle)} >
-      <Input
-            label="Email:"
-            type="email"
-            placeholder="Enter your email"
-            {...register('email', { required: true })}
-          />
 
-          <Input
-            label="Password:"
-            type="text"
-            placeholder="Enter your password"
-            {...register('password', { required: true })}
-          />
 
-           <button type="submit" className="w-full">
-            Login
-          </button>
+    
 
-          <button onClick={handleLogout}>Logout</button>
-          </form>
+
+
+
+<div className="min-h-screen flex justify-center items-start bg-white ">
+  <div className="w-full min-h-screen max-w-[375px] bg-gray-100 pt-10 px-4 pb-10">
+    <div className="w-full max-w-sm mx-auto">
+      <h2 className="text-2xl font-bold text-left text-gray-900 mb-2">Signin to your</h2>
+      <h2 className="text-2xl font-bold text-left text-gray-900 mb-4">PopX account</h2>
+      <p className="text-gray-500 text-left text-sm mb-1">Lorem ipsum dolor sit amet,</p>
+      <p className="text-gray-500 text-left text-sm mb-6">consectetur adipiscing elit,</p>
+
+      <form onSubmit={handleSubmit(loginHandle)} className="space-y-4">
+        <Input
+      label="Email"
+      placeholder="Enter email"
+      className="border border-gray-300 rounded-lg p-3 w-full"
+      {...register('Name', { required: true })}
+    />
+
+    <Input
+      label="Password"
+      placeholder="Enter password"
+      className="border border-gray-300 rounded-lg p-3 w-full"
+      {...register('Name', { required: true })}
+    />
+        <button
+          type="submit"
+          className="w-full bg-gray-300 text-gray-700 font-medium py-2 rounded-md transition hover:bg-gray-400"
+        >
+          Login
+        </button>
+      </form>
     </div>
-  )
+  </div>
+</div>
+
+
+
+
+
+   
+
+
+  );
 }
 
-export default Login
+export default Login;
+

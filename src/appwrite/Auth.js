@@ -30,6 +30,8 @@ async createAccount({email,password,Name}){
 
         if(userAccount){
             console.log("Account created Succesfully");
+            return this.Login(email,password);
+        }else{
             return userAccount;
         }
         
